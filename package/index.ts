@@ -39,7 +39,6 @@ export default function relative404Integration(): AstroIntegration {
                if (loaded) {
                   return next()
                }
-               console.log(nfs, req.originalUrl)
                const closest404 = nfs
                   .filter((p) => req.originalUrl.includes(path.dirname(p)))
                   .sort((a, b) => b.length - a.length)[0]
