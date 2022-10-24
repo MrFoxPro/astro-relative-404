@@ -7,7 +7,7 @@ export default function relative404Integration(): AstroIntegration {
    return {
       name: 'astro-relative-404',
       hooks: {
-         'astro:config:setup'() {
+         async 'astro:config:setup'() {
             async function traverse(dir: string) {
                const dirents = await fs.readdir(dir, { withFileTypes: true })
                const not_found_entry = dirents.find(
@@ -22,27 +22,30 @@ export default function relative404Integration(): AstroIntegration {
                   }
                }
             }
-            traverse('pages')
+            await traverse('pages')
          },
          'astro:server:setup'({ server }) {
             server.middlewares.use(async (req, res, next) => {
                if (path.extname(req.originalUrl) != '') {
                   return next()
                }
-
-               const loaded = await server.pluginContainer.resolveId(req.originalUrl)
-               if (loaded) {
+               let loaded
+               try {
+                  loaded = await server.pluginContainer.resolveId(req.originalUrl)
+               } catch (e) {
                   return next()
                }
 
+               if (loaded) {
+                  return next()
+               }
+               console.log(nfs, req.originalUrl)
                const closest404 = nfs
                   .filter((p) => req.originalUrl.includes(path.dirname(p)))
                   .sort((a, b) => b.length - a.length)[0]
 
-               if (!closest404) {
-                  console.warn('Unable to found any 404')
-                  return next()
-               }
+               if (!closest404) return next()
+
                const url = '/' + closest404.replace(path.extname(closest404), '')
                req.url = url
                next()
