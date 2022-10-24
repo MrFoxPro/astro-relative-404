@@ -1,5 +1,7 @@
 Use local 404.astro.
 
+`pnpm i -D astro-relative-404`
+
 ```
 pages
 ┣ app <- SPA

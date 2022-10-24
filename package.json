@@ -1,6 +1,6 @@
 {
    "name": "astro-relative-404",
-   "version": "1.0.0",
+   "version": "1.0.1",
    "description": "Using relative 404.astro of every route instead of root",
    "keywords": [
       "astro",
@@ -19,7 +19,8 @@
       "require": "./dist/cjs/index.cjs"
    },
    "scripts": {
-      "build": "rollup -c && tsc"
+      "build": "rollup -c",
+      "types": "tsc"
    },
    "files": [
       "./dist"

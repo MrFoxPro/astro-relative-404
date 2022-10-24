@@ -43,8 +43,7 @@ export default function relative404Integration(): AstroIntegration {
                   console.warn('Unable to found any 404')
                   return next()
                }
-
-               const url = path.resolve('pages', closest404)
+               const url = '/' + closest404.replace(path.extname(closest404), '')
                req.url = url
                next()
             })
