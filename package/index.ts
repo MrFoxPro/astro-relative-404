@@ -3,11 +3,12 @@ import fs from 'node:fs/promises'
 import type { AstroIntegration } from 'astro'
 
 export default function relative404Integration(): AstroIntegration {
-   const nfs: string[] = []
+   let nfs: string[]
    return {
       name: 'astro-relative-404',
       hooks: {
          async 'astro:config:setup'() {
+            nfs = []
             async function traverse(dir: string) {
                const dirents = await fs.readdir(dir, { withFileTypes: true })
                const not_found_entry = dirents.find(

@@ -1,7 +1,7 @@
 Use local 404.astro.
 
 `pnpm i -D astro-relative-404`
-
+Note: you should manually restart astro after adding/removing 404.astro page.
 ```
 pages
 ┣ app <- SPA

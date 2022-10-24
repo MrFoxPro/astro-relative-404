@@ -1,6 +1,6 @@
 {
    "name": "astro-relative-404",
-   "version": "1.0.4",
+   "version": "1.0.5",
    "description": "Using relative 404.astro of every route instead of root",
    "keywords": [
       "astro",
