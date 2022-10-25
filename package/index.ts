@@ -1,5 +1,6 @@
 import path from 'node:path'
 import fs from 'node:fs/promises'
+import { fileURLToPath } from 'node:url'
 import type { AstroIntegration } from 'astro'
 
 export default function relative404Integration(): AstroIntegration {
@@ -7,15 +8,16 @@ export default function relative404Integration(): AstroIntegration {
    return {
       name: 'astro-relative-404',
       hooks: {
-         async 'astro:config:setup'() {
+         async 'astro:config:done'({ config }) {
             nfs = []
+            const pages_dir = path.join(fileURLToPath(config.srcDir), 'pages')
             async function traverse(dir: string) {
                const dirents = await fs.readdir(dir, { withFileTypes: true })
                const not_found_entry = dirents.find(
                   (d) => d.isFile() && path.basename(d.name, path.extname(d.name)) === '404'
                )
                if (not_found_entry) {
-                  nfs.push(path.relative('pages', path.join(dir, not_found_entry.name)))
+                  nfs.push(path.relative(pages_dir, path.join(dir, not_found_entry.name)))
                }
                for (const dir_entry of dirents) {
                   if (dir_entry.isDirectory()) {
@@ -23,7 +25,7 @@ export default function relative404Integration(): AstroIntegration {
                   }
                }
             }
-            await traverse('pages')
+            await traverse(pages_dir)
          },
          'astro:server:setup'({ server }) {
             server.middlewares.use(async (req, res, next) => {

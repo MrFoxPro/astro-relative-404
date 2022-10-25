@@ -2,6 +2,7 @@ import { defineConfig } from 'rollup'
 import nodeResolve from '@rollup/plugin-node-resolve'
 import babel from '@rollup/plugin-babel'
 import del from 'rollup-plugin-delete'
+import strip from '@rollup/plugin-strip'
 
 export default defineConfig({
    input: './package/index.ts',
@@ -23,6 +24,7 @@ export default defineConfig({
    plugins: [
       del({ targets: 'dist/*' }),
       nodeResolve({ extensions: ['.ts'] }),
+      strip(),
       babel({
          extensions: ['.ts'],
          babelHelpers: 'bundled',
